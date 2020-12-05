@@ -197,6 +197,12 @@ class FrigateApp():
 
         for detector in self.detectors.values():
             detector.stop()
+        
+        for metrics in self.camera_metrics.values():
+            metrics['capture_process'].join()
+            metrics['process'].join()
+        
+        self.log_process.join()
 
         while len(self.detection_shms) > 0:
             shm = self.detection_shms.pop()
